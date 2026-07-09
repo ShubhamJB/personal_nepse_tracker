@@ -1,0 +1,25 @@
+symbol,quantity,buy_price,buy_date,company_name,sector,notes
+USHEC,10,485.60,2026-06-30,Upper Solu Hydro Electric Company Limited,Hydropower,Txn 2026063005004043
+USHEC,20,486.00,2026-06-30,Upper Solu Hydro Electric Company Limited,Hydropower,Txn 2026063005005698
+USHEC,10,486.00,2026-06-30,Upper Solu Hydro Electric Company Limited,Hydropower,Txn 2026063005006011
+USHEC,10,486.00,2026-06-30,Upper Solu Hydro Electric Company Limited,Hydropower,Txn 2026063005006279
+SBI,10,393.00,2026-06-25,Nepal SBI Bank Limited,Banking,Bill B/0438023/082-083
+SBL,14,389.00,2026-06-25,Siddhartha Bank Limited,Banking,Bill B/0438023/082-083
+SPHL,10,591.00,2026-06-18,Sayapatri Hydropower Limited,Hydropower,Bill B/0426592/082-083 - lot 1
+SPHL,10,591.00,2026-06-18,Sayapatri Hydropower Limited,Hydropower,Bill B/0426592/082-083 - lot 2
+SONA,10,430.10,2026-06-18,Sonapur Minerals and Oil Limited,Manufacturing,Bill B/0426592/082-083
+NRIC,10,991.00,2026-06-18,Nepal Reinsurance Company Limited,Insurance,Bill B/0426592/082-083
+SAHAS,10,666.00,2026-06-18,Sahas Urja Limited,Hydropower,Bill B/0426592/082-083
+SHIVM,50,646.00,2026-06-18,Shivam Cements Ltd.,Manufacturing,Bill B/0426592/082-083
+AKJCL,13,382.00,2026-06-18,Ankhu Khola Jalvidhyut Company Limited,Hydropower,Bill B/0426592/082-083
+API,10,342.20,2026-06-18,Api Power Company Ltd.,Hydropower,Bill B/0426592/082-083
+MEN,10,591.50,2026-06-18,Mountain Energy Nepal Limited,Hydropower,Bill B/0426592/082-083
+AKPL,10,265.30,2026-06-18,Arun Kabeli Power Limited,Hydropower,Bill B/0426592/082-083
+HDHPC,10,219.20,2026-06-18,Himal Dolakha Hydropower Company Limited,Hydropower,Bill B/0426592/082-083
+NHPC,10,282.10,2026-06-18,National Hydro Power Company Limited,Hydropower,Bill B/0426592/082-083
+SHPC,10,504.00,2026-06-18,Sanima Mai Hydropower Ltd.,Hydropower,Bill B/0426592/082-083
+NGPL,40,426.50,2026-06-18,Ngadi Group Power Limited,Hydropower,Bill B/0426592/082-083
+PCIL,10,736.20,2026-06-18,Palpa Cement Industries Limited,Manufacturing,Bill B/0426592/082-083
+NLICL,10,579.00,2026-06-19,National Life Insurance Co. Ltd.,Insurance,Bill B/0427451/082-083
+NIMB,16,195.70,2026-06-19,Nepal Investment Mega Bank Limited,Banking,Bill B/0427451/082-083
+NABIL,10,532.00,2026-06-19,Nabil Bank Limited,Banking,Bill B/0427451/082-083

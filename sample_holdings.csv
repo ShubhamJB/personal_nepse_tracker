@@ -1,0 +1,4 @@
+symbol,quantity,buy_price,buy_date,company_name,sector,notes
+NABIL,120,920.00,2026-06-15,Nabil Bank Limited,Banking,Batch 1
+NTC,80,810.00,2026-06-20,Nepal Telecom,Telecom,Batch 2
+HRL,200,350.00,2026-06-25,Himalayan Reinsurance Limited,Insurance,New IPO listing

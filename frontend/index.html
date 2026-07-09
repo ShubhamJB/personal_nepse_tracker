@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEPSE Portfolio Tracker</title>
+  <meta name="description" content="Personal NEPSE stock portfolio tracker — Windows 95 style. Track holdings, P&L, and price history.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Ticker tape ─────────────────────────────────────── -->
+  <div class="ticker" id="ticker">
+    <span class="ticker-inner" id="ticker-inner">● Connecting to API...</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN WINDOW
+       ═══════════════════════════════════════════════════════ -->
+  <div class="window main-window">
+
+    <!-- Title bar -->
+    <div class="title-bar">
+      <span class="title-icon">📊</span>
+      <span class="title-text">NEPSE Portfolio Tracker — Personal Edition v1.0</span>
+      <div class="title-controls">
+        <button class="title-btn" id="btn-minimize" title="Minimize" onclick="toggleMinimize()">_</button>
+        <button class="title-btn" title="Maximize">□</button>
+        <button class="title-btn" title="Close" style="font-weight:bold">✕</button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar" id="toolbar">
+      <button class="btn" id="btn-refresh" onclick="openRefreshDialog()">↻ Refresh Prices</button>
+      <div class="toolbar-sep"></div>
+      <button class="btn" onclick="openAddStockDialog()">+ Add Stock</button>
+      <button class="btn" onclick="openAddHoldingDialog()">+ Add Holding</button>
+      <button class="btn" onclick="openImportCsvDialog()">📥 Import CSV</button>
+      <div class="toolbar-sep"></div>
+      <button class="btn" onclick="loadAll()">⟳ Reload</button>
+    </div>
+
+    <!-- Update banner (hidden until needed) -->
+    <div class="update-banner" id="update-banner">
+      <span class="blink-dot"></span>
+      <span id="update-banner-msg">Some stocks need price updates today.</span>
+      <button class="btn btn-sm" style="margin-left:auto" onclick="openRefreshDialog()">Update Now</button>
+    </div>
+
+    <!-- Main content (collapsible via minimize) -->
+    <div id="main-body">
+      <div class="content-area">
+
+        <!-- ── Row 1: Summary + Stocks ─────────────────────── -->
+        <div class="row">
+
+          <!-- Portfolio Summary (LCD panel) -->
+          <div class="window" id="panel-summary" style="flex:1.4">
+            <div class="panel-bar">
+              <span class="panel-icon"></span>
+              Portfolio Summary
+            </div>
+            <div class="panel-body">
+              <div class="lcd-group">
+                <div class="lcd-item">
+                  <div class="lcd-label">Total Invested</div>
+                  <div class="lcd dim" id="lcd-invested">---.--</div>
+                </div>
+                <div class="lcd-item">
+                  <div class="lcd-label">Current Value</div>
+                  <div class="lcd dim" id="lcd-value">---.--</div>
+                </div>
+                <div class="lcd-item">
+                  <div class="lcd-label">Unrealized P&amp;L</div>
+                  <div class="lcd dim" id="lcd-pnl">---.--</div>
+                </div>
+                <div class="lcd-item">
+                  <div class="lcd-label">Return %</div>
+                  <div class="lcd dim" id="lcd-pct">--.--</div>
+                </div>
+              </div>
+              <div class="lcd-meta">
+                <span id="meta-asof">As of: —</span>
+                <span id="meta-missing">Missing prices: —</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tracked Stocks panel -->
+          <div class="window" id="panel-stocks" style="flex:0.7; min-width:210px">
+            <div class="panel-bar">
+              <span class="panel-icon"></span>
+              Tracked Stocks
+            </div>
+            <div class="panel-body" style="padding:4px">
+              <div class="stocks-scroll">
+                <table id="tbl-stocks">
+                  <thead>
+                    <tr>
+                      <th>Symbol</th>
+                      <th>Company</th>
+                      <th>Sector</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stocks-body">
+                    <tr><td colspan="3" class="empty-cell">Loading…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="margin-top:5px">
+                <button class="btn" style="width:100%" onclick="openAddStockDialog()">+ Add Stock</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /row 1 -->
+
+        <!-- ── Row 2: Holdings & P&L ────────────────────────── -->
+        <div class="window" id="panel-holdings">
+          <div class="panel-bar">
+            <span class="panel-icon"></span>
+            Holdings &amp; P&amp;L
+            <span style="margin-left:auto; font-weight:normal; font-size:9px; opacity:0.85">Click column headers to sort</span>
+          </div>
+          <div class="panel-body" style="padding:4px">
+            <div class="table-scroll">
+              <table id="tbl-holdings">
+                <thead>
+                  <tr>
+                    <th data-sort="symbol">Symbol</th>
+                    <th data-sort="company_name">Company</th>
+                    <th data-sort="quantity" class="num">Qty</th>
+                    <th data-sort="avg_buy_price" class="num">Avg Buy (Rs)</th>
+                    <th data-sort="latest_ltp" class="num">LTP (Rs)</th>
+                    <th data-sort="current_value" class="num">Value (Rs)</th>
+                    <th data-sort="unrealized_pnl_amount" class="num">P&amp;L (Rs)</th>
+                    <th data-sort="unrealized_pnl_percent" class="num">P&amp;L %</th>
+                    <th data-sort="day_change_percent" class="num">Day %</th>
+                    <th data-sort="price_date">Date</th>
+                    <th>Src</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="holdings-body">
+                  <tr><td colspan="12" class="empty-cell">Loading portfolio…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /holdings panel -->
+
+        <!-- ── Row 3: Individual Holdings (lots) ─────────────── -->
+        <div class="window" id="panel-lots">
+          <div class="panel-bar">
+            <span class="panel-icon"></span>
+            Individual Lots (Manage Holdings)
+            <span style="margin-left:auto; font-weight:normal; font-size:9px; opacity:0.85">Click ✕ to delete a lot</span>
+          </div>
+          <div class="panel-body" style="padding:4px">
+            <div class="table-scroll" style="max-height:160px">
+              <table id="tbl-lots">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Symbol</th>
+                    <th>Company</th>
+                    <th class="num">Qty</th>
+                    <th class="num">Buy Price</th>
+                    <th>Buy Date</th>
+                    <th>Notes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="lots-body">
+                  <tr><td colspan="8" class="empty-cell">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /lots panel -->
+
+      </div><!-- /content-area -->
+    </div><!-- /main-body -->
+
+    <!-- Status bar -->
+    <div class="statusbar">
+      <div class="sb-panel sb-main" id="sb-main">Ready</div>
+      <div class="sb-panel sb-live" id="sb-live" style="display:flex; align-items:center; gap:5px;">
+        <input type="checkbox" id="chk-live-update" checked style="margin:0; cursor:pointer;">
+        <label for="chk-live-update" style="cursor:pointer; user-select:none; margin:0">Live</label>
+        <span id="led-live"></span>
+      </div>
+      <div class="sb-panel sb-count" id="sb-count">0 positions</div>
+      <div class="sb-panel sb-time" id="sb-time">--:--:--</div>
+    </div>
+
+  </div><!-- /main-window -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       DIALOGS
+       ═══════════════════════════════════════════════════════ -->
+
+  <!-- Refresh Prices dialog -->
+  <div class="overlay" id="dlg-refresh">
+    <div class="dialog">
+      <div class="title-bar">
+        <span class="title-icon">↻</span>
+        <span class="title-text">Refresh Prices — Auto Source</span>
+        <div class="title-controls">
+          <button class="title-btn" onclick="closeDialog('dlg-refresh')">✕</button>
+        </div>
+      </div>
+
+      <!-- Phase 1: input -->
+      <div class="dialog-body phase active" id="refresh-p1">
+        <p style="margin-bottom:8px">Fetches live prices from NEPSE → MeroLagani → Chukul (tries each in order). Manual entry available for any that fail.</p>
+        <div class="form-row">
+          <label for="inp-refresh-date">Date (leave blank for today):</label>
+          <input type="date" id="inp-refresh-date">
+        </div>
+      </div>
+
+      <!-- Phase 2: progress -->
+      <div class="dialog-body phase" id="refresh-p2">
+        <p id="refresh-progress-msg">Trying NEPSE → MeroLagani → Chukul…</p>
+        <div class="progress-track">
+          <div class="progress-fill">Please wait…</div>
+        </div>
+      </div>
+
+      <!-- Phase 3: results -->
+      <div class="dialog-body phase" id="refresh-p3">
+        <p id="refresh-result-line" style="margin-bottom:6px; font-weight:bold"></p>
+        <div id="refresh-failed-block" style="display:none">
+          <p style="color:var(--red-neg); font-weight:bold; margin-bottom:4px">⚠ Failed — enter these manually:</p>
+          <div class="failed-list" id="refresh-failed-list"></div>
+        </div>
+        <div id="refresh-api-error" style="display:none; margin-top:6px">
+          <p style="font-size:10px; color:var(--gray-mid)"><b>API message:</b> <span id="refresh-error-txt"></span></p>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button class="btn btn-primary" id="refresh-ok-btn" onclick="doRefresh()">Refresh</button>
+        <button class="btn" onclick="closeDialog('dlg-refresh')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manual Price Entry dialog -->
+  <div class="overlay" id="dlg-manual">
+    <div class="dialog">
+      <div class="title-bar">
+        <span class="title-icon">✎</span>
+        <span class="title-text">Manual Price Entry</span>
+        <div class="title-controls">
+          <button class="title-btn" onclick="skipManual()">✕</button>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <div class="manual-header" id="manual-header">SYMBOL</div>
+        <div class="form-row">
+          <label for="inp-m-date">Date:</label>
+          <input type="date" id="inp-m-date">
+        </div>
+        <div class="form-row">
+          <label for="inp-m-ltp">LTP — Last Traded Price (Rs):</label>
+          <input type="number" id="inp-m-ltp" step="0.01" min="0" placeholder="e.g. 1100.00">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+          <div class="form-row">
+            <label for="inp-m-open">Open (optional):</label>
+            <input type="number" id="inp-m-open" step="0.01" min="0">
+          </div>
+          <div class="form-row">
+            <label for="inp-m-high">High (optional):</label>
+            <input type="number" id="inp-m-high" step="0.01" min="0">
+          </div>
+          <div class="form-row">
+            <label for="inp-m-low">Low (optional):</label>
+            <input type="number" id="inp-m-low" step="0.01" min="0">
+          </div>
+          <div class="form-row">
+            <label for="inp-m-vol">Volume (optional):</label>
+            <input type="number" id="inp-m-vol" min="0">
+          </div>
+        </div>
+        <p style="font-size:10px; color:var(--gray-mid); margin-top:4px" id="manual-counter"></p>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-primary" onclick="submitManual()">OK</button>
+        <button class="btn" onclick="skipManual()">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Stock dialog -->
+  <div class="overlay" id="dlg-add-stock">
+    <div class="dialog">
+      <div class="title-bar">
+        <span class="title-icon">+</span>
+        <span class="title-text">Add New Stock</span>
+        <div class="title-controls">
+          <button class="title-btn" onclick="closeDialog('dlg-add-stock')">✕</button>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <div class="form-row">
+          <label for="inp-s-sym">Symbol (e.g. NABIL):</label>
+          <input type="text" id="inp-s-sym" placeholder="NABIL" maxlength="20">
+        </div>
+        <div class="form-row">
+          <label for="inp-s-name">Company Name:</label>
+          <input type="text" id="inp-s-name" placeholder="Nabil Bank Limited">
+        </div>
+        <div class="form-row">
+          <label for="inp-s-sector">Sector (optional):</label>
+          <input type="text" id="inp-s-sector" placeholder="Banking">
+        </div>
+        <div class="form-error" id="err-add-stock"></div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-primary" onclick="submitAddStock()">Add</button>
+        <button class="btn" onclick="closeDialog('dlg-add-stock')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Holding dialog -->
+  <div class="overlay" id="dlg-add-holding">
+    <div class="dialog">
+      <div class="title-bar">
+        <span class="title-icon">+</span>
+        <span class="title-text">Add Holding / Lot</span>
+        <div class="title-controls">
+          <button class="title-btn" onclick="closeDialog('dlg-add-holding')">✕</button>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <div class="form-row">
+          <label for="inp-h-stock">Stock:</label>
+          <select id="inp-h-stock">
+            <option value="">— Select Stock —</option>
+          </select>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+          <div class="form-row">
+            <label for="inp-h-qty">Quantity (shares):</label>
+            <input type="number" id="inp-h-qty" min="1" step="1" placeholder="100">
+          </div>
+          <div class="form-row">
+            <label for="inp-h-price">Buy Price (Rs):</label>
+            <input type="number" id="inp-h-price" step="0.01" min="0" placeholder="1050.00">
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="inp-h-date">Buy Date:</label>
+          <input type="date" id="inp-h-date">
+        </div>
+        <div class="form-row">
+          <label for="inp-h-notes">Notes (optional):</label>
+          <input type="text" id="inp-h-notes" placeholder="e.g. IPO allotment">
+        </div>
+        <div class="form-error" id="err-add-holding"></div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-primary" onclick="submitAddHolding()">Add Lot</button>
+        <button class="btn" onclick="closeDialog('dlg-add-holding')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete dialog -->
+  <div class="overlay" id="dlg-confirm-del">
+    <div class="dialog" style="min-width:280px">
+      <div class="title-bar">
+        <span class="title-icon">⚠</span>
+        <span class="title-text">Confirm Delete</span>
+        <div class="title-controls">
+          <button class="title-btn" onclick="closeDialog('dlg-confirm-del')">✕</button>
+        </div>
+      </div>
+      <div class="dialog-body" style="display:flex;align-items:flex-start;gap:12px;padding:16px">
+        <div style="font-size:36px; line-height:1">⚠</div>
+        <div id="confirm-del-msg" style="padding-top:6px">Are you sure?</div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-primary" onclick="confirmDelete()">Delete</button>
+        <button class="btn" onclick="closeDialog('dlg-confirm-del')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import CSV dialog -->
+  <div class="overlay" id="dlg-import-csv">
+    <div class="dialog">
+      <div class="title-bar">
+        <span class="title-icon">📥</span>
+        <span class="title-text">Import Holdings from CSV</span>
+        <div class="title-controls">
+          <button class="title-btn" onclick="closeDialog('dlg-import-csv')">✕</button>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <p style="margin-bottom:8px">Select a CSV file to bulk-import holdings. Expected headers: <code>symbol, quantity, buy_price, buy_date</code>. Optional: <code>company_name, sector, notes</code>.</p>
+        <div class="form-row">
+          <label for="inp-csv-file">CSV File:</label>
+          <input type="file" id="inp-csv-file" accept=".csv">
+        </div>
+        <div class="form-error" id="err-import-csv"></div>
+        <div id="import-csv-summary" style="display:none; margin-top:8px; border-top:1px solid var(--gray-mid); padding-top:6px">
+          <p style="font-weight:bold" id="import-csv-result-txt"></p>
+          <div class="failed-list" id="import-csv-errors-list" style="display:none; max-height:80px"></div>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-primary" id="btn-submit-import-csv" onclick="submitImportCsv()">Import</button>
+        <button class="btn" onclick="closeDialog('dlg-import-csv')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

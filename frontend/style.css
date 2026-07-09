@@ -1,0 +1,687 @@
+/* ============================================================
+   NEPSE Portfolio Tracker — Windows 95 / Winamp Retro Theme
+   No border-radius. No soft shadows. No transitions.
+   Bevel everything. Snap everything.
+   ============================================================ */
+
+:root {
+  --gray:        #C0C0C0;
+  --gray-mid:    #808080;
+  --gray-dark:   #404040;
+  --white:       #FFFFFF;
+  --black:       #000000;
+  --navy-a:      #000080;
+  --navy-b:      #1084D0;
+  --green-pos:   #008000;
+  --red-neg:     #CC0000;
+  --lcd-bg:      #002200;
+  --lcd-green:   #00FF00;
+  --lcd-dim:     #006600;
+  --lcd-red:     #FF0000;
+  --sel-bg:      #000080;
+  --sel-fg:      #FFFFFF;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--gray-mid);
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  font-size: 11px;
+  color: var(--black);
+  height: 100vh;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Bevel helpers ────────────────────────────────────────── */
+.raised {
+  border-top:    2px solid var(--white);
+  border-left:   2px solid var(--white);
+  border-bottom: 2px solid var(--gray-dark);
+  border-right:  2px solid var(--gray-dark);
+}
+.sunken {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+}
+
+/* ── Window chrome ────────────────────────────────────────── */
+.window {
+  background: var(--gray);
+  border-top:    2px solid var(--white);
+  border-left:   2px solid var(--white);
+  border-bottom: 2px solid var(--gray-dark);
+  border-right:  2px solid var(--gray-dark);
+}
+
+.main-window {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── Title bar ────────────────────────────────────────────── */
+.title-bar {
+  background: linear-gradient(to right, var(--navy-a), var(--navy-b));
+  color: var(--white);
+  font-weight: bold;
+  font-size: 12px;
+  padding: 2px 4px 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  user-select: none;
+  height: 22px;
+}
+
+.title-icon {
+  width: 16px;
+  height: 16px;
+  background: var(--gray);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  border: 1px solid var(--gray-mid);
+  color: var(--black);
+}
+
+.title-text { flex: 1; letter-spacing: 0.2px; }
+
+.title-controls { display: flex; gap: 2px; }
+
+.title-btn {
+  width: 16px;
+  height: 14px;
+  background: var(--gray);
+  color: var(--black);
+  border-top:    1px solid var(--white);
+  border-left:   1px solid var(--white);
+  border-bottom: 1px solid var(--gray-dark);
+  border-right:  1px solid var(--gray-dark);
+  font-size: 9px;
+  font-family: Tahoma, Arial, sans-serif;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.title-btn:active {
+  border-top:    1px solid var(--gray-dark);
+  border-left:   1px solid var(--gray-dark);
+  border-bottom: 1px solid var(--white);
+  border-right:  1px solid var(--white);
+}
+
+/* ── Panel title bar (smaller version) ───────────────────── */
+.panel-bar {
+  background: linear-gradient(to right, var(--navy-a), var(--navy-b));
+  color: var(--white);
+  font-weight: bold;
+  font-size: 11px;
+  padding: 1px 4px 2px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.panel-icon {
+  width: 10px;
+  height: 10px;
+  background: var(--white);
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ── Toolbar ──────────────────────────────────────────────── */
+.toolbar {
+  background: var(--gray);
+  padding: 3px 4px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border-bottom: 2px solid var(--gray-dark);
+  flex-wrap: wrap;
+}
+
+.toolbar-sep {
+  width: 2px;
+  height: 22px;
+  border-left:  1px solid var(--gray-dark);
+  border-right: 1px solid var(--white);
+  margin: 0 2px;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  background: var(--gray);
+  color: var(--black);
+  border-top:    2px solid var(--white);
+  border-left:   2px solid var(--white);
+  border-bottom: 2px solid var(--gray-dark);
+  border-right:  2px solid var(--gray-dark);
+  padding: 3px 10px 3px;
+  font-family: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  font-size: 11px;
+  cursor: default;
+  white-space: nowrap;
+  min-width: 75px;
+  text-align: center;
+  line-height: 14px;
+}
+
+.btn:active {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  padding: 4px 9px 2px 11px;
+}
+
+.btn:focus { outline: 1px dotted var(--black); outline-offset: -4px; }
+
+.btn-primary {
+  border: 2px solid var(--black);
+  outline: 2px solid var(--gray);
+  outline-offset: 0;
+}
+.btn-primary:active { padding: 4px 9px 2px 11px; }
+
+.btn-sm { min-width: 0; padding: 1px 6px; font-size: 10px; line-height: 13px; }
+.btn-sm:active { padding: 2px 5px 0 7px; }
+
+/* ── Update warning banner ────────────────────────────────── */
+.update-banner {
+  background: #FFFF99;
+  border-bottom: 2px solid var(--gray-dark);
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.update-banner.show { display: flex; }
+
+.blink-dot {
+  width: 9px;
+  height: 9px;
+  background: var(--red-neg);
+  display: inline-block;
+  animation: blink 1s step-start infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ── Ticker tape ──────────────────────────────────────────── */
+.ticker {
+  background: var(--black);
+  color: var(--lcd-green);
+  font-family: "Courier New", "Lucida Console", monospace;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 0;
+  overflow: hidden;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  border: 1px solid var(--gray-dark);
+}
+
+.ticker-inner {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll-ticker 40s linear infinite;
+}
+
+@keyframes scroll-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* ── Layout ───────────────────────────────────────────────── */
+#main-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.content-area {
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.panel-body {
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+#panel-summary, #panel-stocks, #panel-holdings, #panel-lots {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#panel-holdings {
+  flex: 2;
+}
+
+#panel-lots {
+  flex: 1;
+}
+
+/* ── LCD Display (Winamp-style) ───────────────────────────── */
+.lcd-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.lcd-item { display: flex; flex-direction: column; gap: 2px; }
+
+.lcd-label {
+  font-size: 9px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--gray-mid);
+}
+
+.lcd {
+  background: var(--lcd-bg);
+  color: var(--lcd-green);
+  font-family: "Courier New", "Lucida Console", monospace;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 5px 8px;
+  letter-spacing: 1px;
+  text-align: right;
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  min-width: 185px;
+  position: relative;
+  text-shadow: 0 0 10px var(--lcd-green);
+  overflow: hidden;
+}
+
+/* Scanline overlay */
+.lcd::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 3px
+  );
+  pointer-events: none;
+}
+
+.lcd.neg {
+  color: var(--lcd-red);
+  text-shadow: 0 0 10px var(--lcd-red);
+}
+
+.lcd.dim {
+  font-size: 16px;
+  color: var(--lcd-dim);
+  text-shadow: none;
+}
+
+.lcd-meta {
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid var(--gray-dark);
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--gray-mid);
+}
+
+/* ── Table ────────────────────────────────────────────────── */
+.table-scroll {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  overflow: auto;
+  flex: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+thead th {
+  background: var(--gray);
+  border-top:    2px solid var(--white);
+  border-left:   2px solid var(--white);
+  border-bottom: 2px solid var(--gray-dark);
+  border-right:  2px solid var(--gray-dark);
+  padding: 2px 7px;
+  font-weight: bold;
+  font-size: 11px;
+  cursor: default;
+  white-space: nowrap;
+  user-select: none;
+  text-align: left;
+  min-width: 60px;
+}
+
+thead th[data-sort]:hover { background: #D4D4D4; }
+
+thead th.sort-asc::after  { content: ' ▲'; font-size: 8px; }
+thead th.sort-desc::after { content: ' ▼'; font-size: 8px; }
+
+thead th.sort-asc,
+thead th.sort-desc,
+thead th:active {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  padding: 3px 6px 1px 8px;
+}
+
+tbody tr { cursor: default; }
+tbody tr:nth-child(even) { background: #D4D4D4; }
+tbody tr:hover { background: var(--sel-bg); color: var(--sel-fg); }
+tbody tr:hover .pos, tbody tr:hover .neg { color: var(--sel-fg); }
+tbody tr:hover .indicator-ok, tbody tr:hover .indicator-warn { opacity: 1; }
+
+td {
+  padding: 2px 7px;
+  border-bottom: 1px solid var(--gray-mid);
+  white-space: nowrap;
+}
+
+td.num { font-family: "Courier New", monospace; text-align: right; }
+
+.pos { color: var(--green-pos); font-weight: bold; }
+.neg { color: var(--red-neg);   font-weight: bold; }
+
+.indicator-ok   { display: inline-block; width: 8px; height: 8px; background: var(--green-pos); margin-right: 3px; vertical-align: middle; }
+.indicator-warn { display: inline-block; width: 8px; height: 8px; background: var(--red-neg);   margin-right: 3px; vertical-align: middle; animation: blink 1.5s step-start infinite; }
+
+.empty-cell { text-align: center; padding: 14px; color: var(--gray-mid); font-style: italic; }
+
+/* ── Holdings & P&L table ─────────────────────────────────── */
+#tbl-holdings {
+  font-size: 13px;
+}
+
+#tbl-holdings thead th {
+  font-size: 13px;
+  padding: 4px 9px;
+  min-width: 68px;
+}
+
+#tbl-holdings thead th.sort-asc,
+#tbl-holdings thead th.sort-desc,
+#tbl-holdings thead th:active {
+  padding: 5px 8px 3px 10px;
+}
+
+#tbl-holdings thead th.sort-asc::after,
+#tbl-holdings thead th.sort-desc::after {
+  font-size: 9px;
+}
+
+#tbl-holdings td {
+  padding: 4px 9px;
+}
+
+#tbl-holdings .empty-cell {
+  padding: 18px;
+  font-size: 13px;
+}
+
+/* ── Stocks mini-table ────────────────────────────────────── */
+.stocks-scroll {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Status bar ───────────────────────────────────────────── */
+.statusbar {
+  display: flex;
+  padding: 2px;
+  gap: 2px;
+  margin-top: 1px;
+}
+
+.sb-panel {
+  border-top:    1px solid var(--gray-dark);
+  border-left:   1px solid var(--gray-dark);
+  border-bottom: 1px solid var(--white);
+  border-right:  1px solid var(--white);
+  padding: 1px 6px;
+  font-size: 10px;
+}
+.sb-main  { flex: 1; }
+.sb-count { min-width: 80px; text-align: center; }
+.sb-time  { min-width: 65px; text-align: center; font-family: "Courier New", monospace; }
+.sb-live  { display: flex; align-items: center; gap: 5px; min-width: 60px; }
+
+#led-live {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--green-pos);
+  border: 1px solid var(--gray-dark);
+  border-top-color: var(--black);
+  border-left-color: var(--black);
+  border-right-color: var(--white);
+  border-bottom-color: var(--white);
+  background-color: var(--green-pos);
+}
+
+#led-live.flashing {
+  background-color: #00FF00;
+  box-shadow: 0 0 3px #00FF00;
+}
+
+#led-live.inactive {
+  background-color: var(--gray-mid);
+  box-shadow: none;
+}
+
+
+/* ── Dialog overlay ───────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.overlay.open { display: flex; }
+
+.dialog {
+  background: var(--gray);
+  border-top:    2px solid var(--white);
+  border-left:   2px solid var(--white);
+  border-bottom: 2px solid var(--gray-dark);
+  border-right:  2px solid var(--gray-dark);
+  box-shadow: 3px 3px 0 var(--black);
+  min-width: 320px;
+  max-width: 460px;
+  width: 100%;
+}
+
+.dialog-body { padding: 12px; }
+
+.dialog-footer {
+  padding: 8px 12px;
+  border-top: 1px solid var(--gray-dark);
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* ── Form controls ────────────────────────────────────────── */
+.form-row { margin-bottom: 7px; }
+
+.form-row label {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  width: 100%;
+  background: var(--white);
+  color: var(--black);
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  padding: 2px 4px;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  outline: 1px dotted var(--black);
+  outline-offset: 1px;
+}
+
+.form-error {
+  color: var(--red-neg);
+  font-size: 10px;
+  margin-top: 4px;
+  display: none;
+}
+.form-error.show { display: block; }
+
+/* ── Refresh dialog states ────────────────────────────────── */
+.phase { display: none; }
+.phase.active { display: block; }
+
+.progress-track {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  height: 18px;
+  background: var(--white);
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--navy-a);
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  color: var(--white);
+  font-size: 9px;
+  font-weight: bold;
+  animation: progress-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes progress-pulse {
+  0%, 100% { width: 30%; }
+  50%       { width: 75%; }
+}
+
+.failed-list {
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  background: var(--white);
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 2px;
+  margin: 4px 0;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+}
+
+.failed-item {
+  padding: 2px 4px;
+  border-bottom: 1px solid #E0E0E0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.failed-item:last-child { border-bottom: none; }
+
+/* ── Manual entry header ──────────────────────────────────── */
+.manual-header {
+  background: var(--lcd-bg);
+  color: var(--lcd-green);
+  font-family: "Courier New", monospace;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: 2px;
+  border-top:    2px solid var(--gray-dark);
+  border-left:   2px solid var(--gray-dark);
+  border-bottom: 2px solid var(--white);
+  border-right:  2px solid var(--white);
+  text-shadow: 0 0 8px var(--lcd-green);
+}
+
+/* ── Scrollbars (best-effort Win95 style) ─────────────────── */
+::-webkit-scrollbar { width: 16px; height: 16px; }
+::-webkit-scrollbar-track { background: var(--gray); }
+::-webkit-scrollbar-thumb {
+  background: var(--gray);
+  border-top:    2px solid var(--white);
+  border-left:   2px solid var(--white);
+  border-bottom: 2px solid var(--gray-dark);
+  border-right:  2px solid var(--gray-dark);
+  min-height: 20px;
+}
+::-webkit-scrollbar-button { background: var(--gray); height: 16px; width: 16px; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .lcd-group { grid-template-columns: 1fr; }
+  .row { flex-direction: column; }
+  .lcd { min-width: 0; font-size: 18px; }
+}
